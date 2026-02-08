@@ -49,11 +49,12 @@ export default async function DashboardPage({
     profile = created;
   }
 
-  const { data: victories = [] } = await supabase
+  const { data: victories } = await supabase
     .from("victories")
     .select("*")
     .eq("user_id", data.user.id)
     .order("created_at", { ascending: false });
+  const safeVictories = victories ?? [];
 
   return (
     <div className="min-h-screen racing-bg text-white">
@@ -269,12 +270,12 @@ export default async function DashboardPage({
             </form>
 
             <div className="mt-8 grid gap-3">
-              {victories.length === 0 ? (
+              {safeVictories.length === 0 ? (
                 <p className="text-sm text-zinc-400">
                   Nenhuma vitória cadastrada ainda.
                 </p>
               ) : (
-                victories.map((victory) => (
+                safeVictories.map((victory) => (
                   <div
                     key={victory.id}
                     className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
