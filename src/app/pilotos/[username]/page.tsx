@@ -20,11 +20,12 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     redirect("/dashboard");
   }
 
-  const { data: victories = [] } = await supabase
+  const { data: victories } = await supabase
     .from("victories")
     .select("*")
     .eq("user_id", profile.id)
     .order("created_at", { ascending: false });
+  const safeVictories = victories ?? [];
 
   const { data: userData } = await supabase.auth.getUser();
   const isOwner = userData.user?.id === profile.id;
@@ -116,16 +117,16 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               Vitórias e resultados
             </h2>
             <span className="text-xs uppercase tracking-[0.3em] text-zinc-400">
-              {victories.length} registros
+              {safeVictories.length} registros
             </span>
           </div>
           <div className="mt-6 grid gap-3">
-            {victories.length === 0 ? (
+            {safeVictories.length === 0 ? (
               <p className="text-sm text-zinc-400">
                 Nenhuma vitória cadastrada ainda.
               </p>
             ) : (
-              victories.map((victory) => (
+              safeVictories.map((victory) => (
                 <div
                   key={victory.id}
                   className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
