@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+:root {
+  --black: #0b0b0b;
+  --coal: #151515;
+  --steel: #2b2b2b;
+  --ash: #3a3a3a;
+  --red: #e11d2e;
+  --orange: #ff6a00;
+  --yellow: #ffc400;
+  --blue: #1e40ff;
+  --cream: #f5f0e6;
+  --glow: #ffb347;
+  --background: var(--black);
+  --foreground: #f4f4f4;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: var(--black);
+    --foreground: #f4f4f4;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+}
+
+.racing-bg {
+  background-image:
+    radial-gradient(900px 480px at 78% -10%, rgba(30, 64, 255, 0.45), transparent 60%),
+    radial-gradient(700px 520px at 5% 10%, rgba(225, 29, 46, 0.35), transparent 55%),
+    radial-gradient(420px 320px at 50% 100%, rgba(255, 196, 0, 0.35), transparent 70%),
+    linear-gradient(180deg, rgba(6, 6, 6, 0.95), rgba(0, 0, 0, 0.98));
+  background-color: var(--black);
+}
+
+.track-grid {
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(circle at 30% 20%, black 40%, transparent 72%);
+}
+
+.checkered {
+  background-image:
+    linear-gradient(45deg, rgba(255, 255, 255, 0.08) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.08) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.08) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.08) 75%);
+  background-size: 26px 26px;
+  background-position: 0 0, 0 13px, 13px -13px, -13px 0px;
+}
+
+.glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+}
+
+.primary-stripe {
+  background-image: linear-gradient(
+    90deg,
+    rgba(30, 64, 255, 0.9),
+    rgba(30, 64, 255, 0.9) 30%,
+    rgba(255, 196, 0, 0.9) 30%,
+    rgba(255, 196, 0, 0.9) 60%,
+    rgba(225, 29, 46, 0.9) 60%,
+    rgba(225, 29, 46, 0.9)
+  );
+}
+
+.crest-glow {
+  box-shadow:
+    0 0 0 1px rgba(255, 196, 0, 0.45),
+    0 0 30px rgba(255, 106, 0, 0.35),
+    0 0 80px rgba(225, 29, 46, 0.28);
+}
+
+.spark {
+  position: relative;
+}
+
+.spark::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, rgba(255, 196, 0, 0.7), rgba(255, 106, 0, 0.2), transparent 60%);
+  opacity: 0.55;
+  z-index: -1;
+  filter: blur(18px);
+}
+
+.scanline {
+  background-image: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.03) 50%, transparent 100%);
+  background-size: 100% 6px;
+  animation: scan 8s linear infinite;
+}
+
+@keyframes scan {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 200px;
+  }
+}
