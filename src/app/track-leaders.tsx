@@ -13,7 +13,7 @@ type TrackLeader = {
 };
 
 type TrackLeadersProps = {
-  tracks: TrackLeader[];
+  leaders: TrackLeader[];
 };
 
 export default function TrackLeaders({ leaders }: TrackLeadersProps) {
