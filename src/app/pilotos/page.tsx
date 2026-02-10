@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import PilotsGrid from "./PilotsGrid";
 
 export const dynamic = "force-dynamic";
@@ -28,7 +28,7 @@ export default async function PilotsPage() {
 
   const { data: pilots } = await supabase
     .from("profiles")
-    .select("id, display_name, username, avatar_url, banner_url, experience")
+    .select("id, display_name, username, avatar_url, banner_url, experience, bio")
     .order("created_at", { ascending: false });
 
   const { data: victoriesData } = await supabase
