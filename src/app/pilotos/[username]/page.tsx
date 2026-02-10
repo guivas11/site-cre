@@ -49,14 +49,14 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
         <div className="relative mx-auto flex max-w-3xl flex-col gap-6 px-6 pb-24 pt-12">
           <h1 className="font-display text-3xl tracking-[0.12em]">
-            Perfil no encontrado
+            Perfil não encontrado
           </h1>
           <p className="text-sm text-zinc-300">
             Username solicitado: <span className="text-yellow-300">@{usernameParam || ""}</span>
           </p>
           <div className="glass rounded-3xl p-6">
             <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">
-              ltimos usernames cadastrados
+              Últimos usernames cadastrados
             </p>
             <ul className="mt-4 flex flex-col gap-2 text-sm text-zinc-200">
               {fallbackUsers.length === 0 ? (
