@@ -37,11 +37,11 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     .maybeSingle();
 
   if (!profile) {
-    const { data: fallbackUsers = [] } = await supabase
+    const { data: fallbackUsers } = await supabase
       .from("profiles")
       .select("username, email")
       .order("created_at", { ascending: false })
-      .limit(5);
+      .limit(5);\r\n\r\n  const safeFallbackUsers = fallbackUsers ?? [];
     return (
       <div className="min-h-screen racing-bg text-white">
         <div className="absolute inset-0 track-grid opacity-35" />
@@ -59,10 +59,10 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               Últimos usernames cadastrados
             </p>
             <ul className="mt-4 flex flex-col gap-2 text-sm text-zinc-200">
-              {fallbackUsers.length === 0 ? (
+              {safeFallbackUsers.length === 0 ? (
                 <li>Nenhum perfil encontrado.</li>
               ) : (
-                fallbackUsers.map((user) => (
+                safeFallbackUsers.map((user) => (
                   <li key={`${user.username}-${user.email}`}>
                     @{user.username ?? "(sem username)"} - {user.email ?? ""}
                   </li>
