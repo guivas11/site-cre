@@ -1,96 +1,65 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import PilotsGrid from "./PilotsGrid";
 
 export const dynamic = "force-dynamic";
 
+type PilotRow = {
+  id: string;
+  display_name: string | null;
+  username: string | null;
+  avatar_url: string | null;
+  banner_url: string | null;
+  experience: string | null;
+};
+
 type VictoryRow = {
+  id: string;
   user_id: string;
+  position: string | null;
   category: string | null;
-  date: string | null;
+  track: string | null;
   created_at: string | null;
 };
 
 export default async function PilotsPage() {
   const supabase = await createClient();
-  const { data: pilots = [] } = await supabase
-    .from("profiles")
-    .select("id, username, display_name, avatar_url, banner_url, experience, bio")
-    .order("created_at", { ascending: false });
-  const { data: victoriesData } = await supabase
-    .from("victories")
-    .select("user_id, category, date, created_at")
-    .order("created_at", { ascending: false });
   const { data: userData } = await supabase.auth.getUser();
   const currentUserId = userData.user?.id ?? null;
 
-  const victories = (victoriesData ?? []) as VictoryRow[];\r\n  const safePilots = (pilots ?? []) as PilotRow[];
+  const { data: pilots } = await supabase
+    .from("profiles")
+    .select("id, display_name, username, avatar_url, banner_url, experience")
+    .order("created_at", { ascending: false });
+
+  const { data: victoriesData } = await supabase
+    .from("victories")
+    .select("id, user_id, position, category, track, created_at")
+    .order("created_at", { ascending: false });
+
+  const victories = (victoriesData ?? []) as VictoryRow[];
+  const safePilots = (pilots ?? []) as PilotRow[];
   const pilotById = new Map(safePilots.map((pilot) => [pilot.id, pilot]));
 
   const now = new Date();
   const weekAgo = new Date(now);
   weekAgo.setDate(now.getDate() - 7);
 
-  const recentCounts = new Map<string, number>();
-  const totalCounts = new Map<string, number>();
-  const categoryCounts = new Map<string, Map<string, number>>();
-
-  victories.forEach((victory) => {
-    const dateValue = victory.date || victory.created_at || "";
-    const eventDate = dateValue ? new Date(dateValue) : null;
-    const category = victory.category?.trim() || "Geral";
-
-    totalCounts.set(
-      victory.user_id,
-      (totalCounts.get(victory.user_id) ?? 0) + 1,
-    );
-
-    if (eventDate && eventDate >= weekAgo) {
-      recentCounts.set(
-        victory.user_id,
-        (recentCounts.get(victory.user_id) ?? 0) + 1,
-      );
-    }
-
-    if (!categoryCounts.has(category)) {
-      categoryCounts.set(category, new Map());
-    }
-    const categoryMap = categoryCounts.get(category)!;
-    categoryMap.set(
-      victory.user_id,
-      (categoryMap.get(victory.user_id) ?? 0) + 1,
-    );
+  const recentVictories = victories.filter((victory) => {
+    if (!victory.created_at) return false;
+    return new Date(victory.created_at) >= weekAgo;
   });
 
-  const pickFeatured = () => {
-    const source = recentCounts.size > 0 ? recentCounts : totalCounts;
-    let bestId = "";
-    let bestScore = 0;
-    source.forEach((score, userId) => {
-      if (score > bestScore) {
-        bestScore = score;
-        bestId = userId;
-      }
-    });
-    return bestId ? { id: bestId, score: bestScore } : null;
-  };
+  const weeklyWins = recentVictories.filter((victory) => {
+    const pos = victory.position?.toLowerCase() ?? "";
+    return ["1º", "1", "p1", "1o", "1°"].includes(pos);
+  });
 
-  const featured = pickFeatured();
-  const featuredPilot = featured ? pilotById.get(featured.id) : null;
+  const spotlightId =
+    weeklyWins.length > 0
+      ? weeklyWins[0].user_id
+      : recentVictories[0]?.user_id ?? safePilots[0]?.id ?? null;
 
-  const rankings = Array.from(categoryCounts.entries()).map(
-    ([category, map]) => {
-      const entries = Array.from(map.entries())
-        .map(([userId, count]) => ({
-          userId,
-          count,
-          pilot: pilotById.get(userId) ?? null,
-        }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 5);
-      return { category, entries };
-    },
-  );
-  rankings.sort((a, b) => b.entries.length - a.entries.length);
+  const spotlight = spotlightId ? pilotById.get(spotlightId) : null;
 
   return (
     <div className="min-h-screen racing-bg text-white">
@@ -98,117 +67,64 @@ export default async function PilotsPage() {
       <div className="absolute inset-0 scanline opacity-15" />
 
       <div className="relative mx-auto flex max-w-6xl flex-col gap-10 px-6 pb-24 pt-12">
-        <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <header className="flex flex-wrap items-center justify-between gap-6">
           <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-yellow-300">
+            <p className="text-xs uppercase tracking-[0.4em] text-yellow-300">
               Comunidade CRE
             </p>
-            <h1 className="font-display text-4xl tracking-[0.12em]">
-              Pilotos cadastrados
-            </h1>
+            <h1 className="font-display text-3xl tracking-[0.2em]">Pilotos cadastrados</h1>
             <p className="mt-2 text-sm text-zinc-300">
-              Explore perfis, vitorias e experiencias de cada piloto.
+              Explore perfis, vitórias e experiências de cada piloto.
             </p>
           </div>
           <a
-            className="rounded-full border border-white/20 px-5 py-3 text-xs uppercase tracking-[0.25em] text-zinc-200 transition hover:border-white/50 hover:text-white"
             href="/"
+            className="rounded-full border border-white/20 px-5 py-3 text-xs uppercase tracking-[0.25em] text-zinc-200 transition hover:border-white/50 hover:text-white"
           >
             Voltar para a home
           </a>
         </header>
 
-        <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="glass rounded-3xl p-6">
-            <p className="text-xs uppercase tracking-[0.35em] text-yellow-300">
-              Piloto da semana
-            </p>
-            {featuredPilot ? (
-              <div className="mt-5 flex items-center gap-4">
-                <div className="h-16 w-16 overflow-hidden rounded-2xl border border-white/10 bg-black/60">
-                  {featuredPilot.avatar_url ? (
-                    <img
-                      src={featuredPilot.avatar_url}
-                      alt={featuredPilot.display_name || "Piloto"}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-xs text-zinc-400">
-                      {featuredPilot.display_name?.slice(0, 2).toUpperCase() ||
-                        "CRE"}
-                    </div>
-                  )}
-                </div>
+        <section className="glass rounded-3xl p-6 sm:p-8">
+          <div className="flex flex-wrap items-start justify-between gap-6">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">
+                Piloto em destaque
+              </p>
+              <h2 className="mt-3 font-display text-2xl tracking-[0.18em]">
+                {spotlight?.display_name || spotlight?.username || "Piloto CRE"}
+              </h2>
+              <p className="mt-2 text-sm text-zinc-300">
+                {spotlight?.experience || "Sem experiência cadastrada ainda."}
+              </p>
+            </div>
+            {spotlight ? (
+              <div className="flex items-center gap-4 rounded-3xl border border-white/10 bg-black/50 px-5 py-4">
+                {spotlight.avatar_url ? (
+                  <img
+                    src={spotlight.avatar_url}
+                    alt={spotlight.display_name || "Piloto"}
+                    className="h-14 w-14 rounded-2xl object-cover"
+                  />
+                ) : (
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/15 bg-white/5 text-lg">
+                    {spotlight.display_name?.slice(0, 1) || "C"}
+                  </div>
+                )}
                 <div>
-                  <p className="text-sm font-semibold text-white">
-                    {featuredPilot.display_name || "Piloto CRE"}
-                  </p>
                   <p className="text-xs uppercase tracking-[0.3em] text-yellow-300">
-                    {featuredPilot.username
-                      ? `@${featuredPilot.username}`
-                      : "Sem username"}
+                    {spotlight.username ? `@${spotlight.username}` : "Sem username"}
                   </p>
-                  <p className="mt-2 text-xs uppercase tracking-[0.3em] text-zinc-400">
-                    {featured?.score ?? 0} vitorias na semana
+                  <p className="text-sm text-zinc-200">
+                    {spotlight.display_name || "Piloto CRE"}
                   </p>
                 </div>
               </div>
-            ) : (
-              <p className="mt-4 text-sm text-zinc-400">
-                Nenhuma vitoria registrada nesta semana.
-              </p>
-            )}
-          </div>
-
-          <div className="glass rounded-3xl p-6">
-            <div className="flex items-center justify-between">
-              <p className="text-xs uppercase tracking-[0.35em] text-yellow-300">
-                Ranking por categoria
-              </p>
-              <span className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">
-                Top 5
-              </span>
-            </div>
-            <div className="mt-5 grid gap-4">
-              {rankings.length === 0 ? (
-                <p className="text-sm text-zinc-400">
-                  Sem vitorias registradas.
-                </p>
-              ) : (
-                rankings.slice(0, 3).map((ranking) => (
-                  <div
-                    key={ranking.category}
-                    className="rounded-2xl border border-white/10 bg-black/40 p-4"
-                  >
-                    <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">
-                      {ranking.category}
-                    </p>
-                    <div className="mt-3 grid gap-2">
-                      {ranking.entries.map((entry, index) => (
-                        <div
-                          key={`${ranking.category}-${entry.userId}`}
-                          className="flex items-center justify-between text-sm text-zinc-200"
-                        >
-                          <span className="uppercase tracking-[0.2em] text-zinc-400">
-                            #{index + 1}
-                          </span>
-                          <span className="flex-1 px-3">
-                            {entry.pilot?.display_name || "Piloto CRE"}
-                          </span>
-                          <span className="text-xs text-yellow-300">
-                            {entry.count} vitorias
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
+            ) : null}
           </div>
         </section>
 
-        <PilotsGrid pilots={pilots} currentUserId={currentUserId} />
+        <PilotsGrid pilots={safePilots} currentUserId={currentUserId} />
       </div>
     </div>
   );
