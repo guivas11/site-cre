@@ -64,9 +64,6 @@ export default function TrackLeaders({ leaders }: TrackLeadersProps) {
           ))}
         </div>
       </div>
-      <p className="mt-3 text-[10px] uppercase tracking-[0.35em] text-zinc-500">
-        Próxima pista em instantes
-      </p>
     </div>
   );
 }

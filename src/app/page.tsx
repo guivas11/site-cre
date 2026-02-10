@@ -360,6 +360,38 @@ export default async function Home() {
             )}
           </div>
         </section>
+
+        <section className="grid gap-6 lg:grid-cols-3">
+          {[
+            {
+              title: "Pilotos",
+              desc: "Explore perfis completos, conquistas e tempos por pista.",
+              href: "/pilotos",
+            },
+            {
+              title: "Agenda",
+              desc: "Calendário das próximas etapas, treinos e eventos da liga.",
+              href: "/agendas",
+            },
+            {
+              title: "Comunidade",
+              desc: "Mural e chat para trocar setups, dicas e desafios.",
+              href: "/comunidades",
+            },
+          ].map((card) => (
+            <a
+              key={card.title}
+              href={card.href}
+              className="glass rounded-3xl p-6 transition hover:border-white/20"
+            >
+              <h3 className="font-display text-xl tracking-[0.2em]">{card.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-300">{card.desc}</p>
+              <span className="mt-6 inline-flex text-xs uppercase tracking-[0.3em] text-yellow-300">
+                Abrir seção
+              </span>
+            </a>
+          ))}
+        </section>
       </div>
     </div>
   );

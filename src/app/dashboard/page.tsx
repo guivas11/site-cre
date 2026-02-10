@@ -1,4 +1,4 @@
-﻿import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
   addVictory,
@@ -458,8 +458,8 @@ export default async function DashboardPage({
                     </div>
                     <p className="text-sm text-zinc-200">
                       {victory.track || "Pista não informada"}{" "}
-                      {victory.position ? `Â· ${victory.position}` : ""}
-                      {victory.category ? ` Â· ${victory.category}` : ""}
+                      {victory.position ? `· ${victory.position}` : ""}
+                      {victory.category ? ` · ${victory.category}` : ""}
                     </p>
                     {victory.notes ? (
                       <p className="text-xs text-zinc-400">{victory.notes}</p>
@@ -539,7 +539,7 @@ export default async function DashboardPage({
               <p className="text-xl font-semibold text-yellow-300">
                 {safeVictories.filter((victory) => {
                   const position = victory.position?.toString().trim() ?? "";
-                  return ["1º", "1", "p1", "1o", "1Â°"].includes(
+                  return ["1º", "1", "p1", "1o", "1°"].includes(
                     position.toLowerCase(),
                   );
                 }).length}
@@ -552,7 +552,7 @@ export default async function DashboardPage({
               <p className="text-xl font-semibold text-yellow-300">
                 {safeVictories.filter((victory) => {
                   const position = victory.position?.toString().trim() ?? "";
-                  return ["1º", "2Âº", "3Âº", "1", "2", "3", "p1", "p2", "p3", "1o", "2o", "3o", "1Â°", "2Â°", "3Â°"].includes(
+                  return ["1º", "2º", "3º", "1", "2", "3", "p1", "p2", "p3", "1o", "2o", "3o", "1°", "2°", "3°"].includes(
                     position.toLowerCase(),
                   );
                 }).length}
