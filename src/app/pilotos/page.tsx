@@ -10,6 +10,7 @@ type PilotRow = {
   avatar_url: string | null;
   banner_url: string | null;
   experience: string | null;
+  bio: string | null;
 };
 
 type VictoryRow = {
