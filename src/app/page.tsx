@@ -66,10 +66,12 @@ export default async function Home() {
   ).slice(0, 6);
   const featuredLink = featured.id ? "/posts/" + featured.id : "/posts";
 
-  const { data: lapTimes = [] } = await supabase
+  const { data: lapTimes } = await supabase
     .from("lap_times")
     .select("user_id, track, time")
     .limit(500);
+
+  const safeLapTimes = lapTimes ?? [];
 
   const { data: profileList } = await supabase
     .from("profiles")
@@ -92,7 +94,7 @@ export default async function Home() {
   };
 
   const grouped = new Map<string, LeaderEntry[]>();
-  lapTimes.forEach((row) => {
+  safeLapTimes.forEach((row) => {
     if (!row.track || !row.time) return;
     const entries = grouped.get(row.track) ?? [];
     entries.push({
