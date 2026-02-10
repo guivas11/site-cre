@@ -16,10 +16,10 @@ type TrackLeadersProps = {
   tracks: TrackLeader[];
 };
 
-export default function TrackLeaders({ tracks }: TrackLeadersProps) {
+export default function TrackLeaders({ leaders }: TrackLeadersProps) {
   const list = useMemo(
-    () => tracks.filter((track) => track.entries.length > 0),
-    [tracks],
+    () => leaders.filter((track) => track.entries.length > 0),
+    [leaders],
   );
   const [index, setIndex] = useState(0);
 
