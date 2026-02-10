@@ -2,6 +2,11 @@ import { createClient } from "@/lib/supabase/server";
 import { ensureUsername } from "@/lib/auth/username";
 import TrackLeaders from "./track-leaders";
 
+type LeaderEntry = {
+  name: string;
+  time: string;
+};
+
 type PostItem = {
   id: string;
   title: string;
