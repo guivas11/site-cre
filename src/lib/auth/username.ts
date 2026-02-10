@@ -12,6 +12,18 @@ function normalizeUsername(value: string) {
 export async function ensureUsername(userId: string, email?: string | null) {
   const supabase = await createClient();
 
+  const displayName = email?.split("@")[0] || "piloto";
+  await supabase
+    .from("profiles")
+    .upsert(
+      {
+        id: userId,
+        email,
+        display_name: displayName,
+      },
+      { onConflict: "id" },
+    );
+
   const { data: existing } = await supabase
     .from("profiles")
     .select("username")

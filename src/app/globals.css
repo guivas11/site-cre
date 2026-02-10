@@ -112,6 +112,25 @@ body {
   animation: scan 8s linear infinite;
 }
 
+.track-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.track-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+}
+
+.track-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(255, 196, 0, 0.9), rgba(225, 29, 46, 0.7));
+  border-radius: 999px;
+}
+
+.track-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 196, 0, 0.9) rgba(255, 255, 255, 0.06);
+}
+
 @keyframes scan {
   0% {
     background-position: 0 0;
@@ -119,4 +138,54 @@ body {
   100% {
     background-position: 0 200px;
   }
+}
+
+@keyframes fadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-slide {
+  animation: fadeSlide 0.45s ease-out;
+}
+
+.dashboard-textarea {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 196, 0, 0.7) transparent;
+}
+
+.dashboard-textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dashboard-textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dashboard-textarea::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(255, 196, 0, 0.7), rgba(255, 106, 0, 0.35));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+@keyframes toast-in {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.animate-toast-in {
+  animation: toast-in 0.35s ease-out;
 }
