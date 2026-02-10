@@ -23,8 +23,8 @@ export default async function PilotsPage() {
   const { data: userData } = await supabase.auth.getUser();
   const currentUserId = userData.user?.id ?? null;
 
-  const victories = (victoriesData ?? []) as VictoryRow[];
-  const pilotById = new Map(pilots.map((pilot) => [pilot.id, pilot]));
+  const victories = (victoriesData ?? []) as VictoryRow[];\r\n  const safePilots = (pilots ?? []) as PilotRow[];
+  const pilotById = new Map(safePilots.map((pilot) => [pilot.id, pilot]));
 
   const now = new Date();
   const weekAgo = new Date(now);
