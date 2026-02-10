@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { ensureUsername } from "@/lib/auth/username";
 import TrackLeaders from "./track-leaders";
 
@@ -233,7 +233,7 @@ export default async function Home() {
                 className="text-xs uppercase tracking-[0.3em] text-yellow-300 transition hover:text-yellow-200"
                 href={featured.id ? `/posts/${featured.id}` : "/posts"}
               >
-                Continuar lendo >
+                Continuar lendo &gt;
               </a>
             </div>
 
@@ -350,7 +350,7 @@ export default async function Home() {
                     className="mt-3 inline-flex text-[10px] uppercase tracking-[0.3em] text-yellow-300 transition hover:text-yellow-200"
                     href={post.id ? `/posts/${post.id}` : "/posts"}
                   >
-                    Continuar lendo >
+                    Continuar lendo &gt;
                   </a>
                   <p className="mt-4 text-xs uppercase tracking-[0.3em] text-yellow-300">
                     {post.author || "Equipe CRE"}
