@@ -66,12 +66,13 @@ export default async function Home() {
     .select("user_id, track, time")
     .limit(500);
 
-  const { data: profileList = [] } = await supabase
+  const { data: profileList } = await supabase
     .from("profiles")
     .select("id, display_name, username");
 
+  const safeProfileList = profileList ?? [];
   const nameMap = new Map(
-    profileList.map((p) => [
+    safeProfileList.map((p) => [
       p.id,
       p.display_name || (p.username ? `@${p.username}` : "Piloto CRE"),
     ]),
