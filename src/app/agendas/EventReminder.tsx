@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 type EventReminderProps = {
+  eventId?: string;
   title: string;
   startAt: string;
 };
