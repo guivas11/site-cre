@@ -20,13 +20,12 @@ type PilotsGridProps = {
 export default function PilotsGrid({ pilots, currentUserId }: PilotsGridProps) {
   const [selected, setSelected] = useState<Pilot | null>(null);
   const [query, setQuery] = useState("");
+
   const sortedPilots = useMemo(
-    () =>
-      [...pilots].sort((a, b) =>
-        (a.display_name || "").localeCompare(b.display_name || ""),
-      ),
+    () => [...pilots].sort((a, b) => (a.display_name || "").localeCompare(b.display_name || "")),
     [pilots],
   );
+
   const filteredPilots = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return sortedPilots;
@@ -39,7 +38,7 @@ export default function PilotsGrid({ pilots, currentUserId }: PilotsGridProps) {
 
   if (sortedPilots.length === 0) {
     return (
-      <section className="glass rounded-3xl p-6 text-sm text-zinc-300">
+      <section className="glass rounded-2xl p-4 text-sm text-zinc-300 md:rounded-3xl md:p-6">
         Nenhum piloto cadastrado ainda.
       </section>
     );
@@ -49,7 +48,7 @@ export default function PilotsGrid({ pilots, currentUserId }: PilotsGridProps) {
 
   return (
     <>
-      <div className="glass rounded-3xl p-4">
+      <div className="glass rounded-2xl p-4 md:rounded-3xl">
         <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/60 px-4 py-3 text-sm text-zinc-200">
           <svg
             className="h-4 w-4 text-yellow-300/80"
@@ -72,19 +71,17 @@ export default function PilotsGrid({ pilots, currentUserId }: PilotsGridProps) {
           />
         </div>
         {query && filteredPilots.length === 0 ? (
-          <p className="mt-3 text-xs uppercase tracking-[0.3em] text-zinc-500">
-            Nenhum piloto encontrado.
-          </p>
+          <p className="mt-3 text-xs uppercase tracking-[0.3em] text-zinc-500">Nenhum piloto encontrado.</p>
         ) : null}
       </div>
 
-      <section className="grid gap-6 md:grid-cols-2">
+      <section className="grid gap-4 sm:gap-6 md:grid-cols-2">
         {filteredPilots.map((pilot) => (
           <button
             key={pilot.id}
             type="button"
             onClick={() => setSelected(pilot)}
-            className="group glass relative overflow-hidden rounded-3xl p-6 text-left transition hover:border-white/30"
+            className="group glass relative overflow-hidden rounded-2xl p-4 text-left transition hover:border-white/30 sm:rounded-3xl sm:p-6"
           >
             <div
               className="absolute inset-0 opacity-40 transition group-hover:opacity-60"
@@ -102,11 +99,7 @@ export default function PilotsGrid({ pilots, currentUserId }: PilotsGridProps) {
             <div className="relative flex items-center gap-4">
               <div className="h-14 w-14 overflow-hidden rounded-2xl border border-white/10 bg-black/60">
                 {pilot.avatar_url ? (
-                  <img
-                    src={pilot.avatar_url}
-                    alt="Avatar"
-                    className="h-full w-full object-cover"
-                  />
+                  <img src={pilot.avatar_url} alt="Avatar" className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center text-xs text-zinc-400">
                     {pilot.display_name?.slice(0, 2).toUpperCase() || "CRE"}
@@ -114,32 +107,28 @@ export default function PilotsGrid({ pilots, currentUserId }: PilotsGridProps) {
                 )}
               </div>
               <div>
-                <p className="text-sm font-semibold text-white">
-                  {pilot.display_name || "Piloto CRE"}
-                </p>
+                <p className="text-sm font-semibold text-white">{pilot.display_name || "Piloto CRE"}</p>
                 <p className="text-xs uppercase tracking-[0.3em] text-yellow-300">
                   {pilot.username ? `@${pilot.username}` : "Sem username"}
                 </p>
               </div>
             </div>
-            <p className="relative mt-4 text-xs text-zinc-300">
-              {pilot.experience || "Experiência não informada."}
-            </p>
+            <p className="relative mt-4 text-xs text-zinc-300">{pilot.experience || "Experiencia nao informada."}</p>
           </button>
         ))}
       </section>
 
       {selected ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-3 backdrop-blur-sm sm:p-6"
           onClick={() => setSelected(null)}
         >
           <div
-            className="relative w-full max-w-3xl overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-black/80 via-black/60 to-black/40 shadow-[0_30px_120px_rgba(0,0,0,0.6)]"
+            className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-black/90 via-black/70 to-black/50 shadow-[0_30px_120px_rgba(0,0,0,0.6)] sm:rounded-[32px]"
             onClick={(event) => event.stopPropagation()}
           >
             <div
-              className="relative h-48 w-full"
+              className="relative h-40 w-full sm:h-48"
               style={
                 selected.banner_url
                   ? {
@@ -151,12 +140,12 @@ export default function PilotsGrid({ pilots, currentUserId }: PilotsGridProps) {
               }
             >
               <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
-              <div className="absolute left-6 top-6 flex items-center gap-3">
-                <span className="rounded-full border border-yellow-300/40 bg-yellow-300/10 px-4 py-2 text-[10px] uppercase tracking-[0.35em] text-yellow-200">
+              <div className="absolute left-4 top-4 flex items-center gap-2 sm:left-6 sm:top-6 sm:gap-3">
+                <span className="rounded-full border border-yellow-300/40 bg-yellow-300/10 px-3 py-1.5 text-[10px] uppercase tracking-[0.3em] text-yellow-200 sm:px-4 sm:py-2 sm:tracking-[0.35em]">
                   Perfil CRE
                 </span>
                 {isOwner ? (
-                  <span className="rounded-full border border-blue-400/40 bg-blue-500/10 px-4 py-2 text-[10px] uppercase tracking-[0.35em] text-blue-200">
+                  <span className="rounded-full border border-blue-400/40 bg-blue-500/10 px-3 py-1.5 text-[10px] uppercase tracking-[0.3em] text-blue-200 sm:px-4 sm:py-2 sm:tracking-[0.35em]">
                     Seu perfil
                   </span>
                 ) : null}
@@ -164,18 +153,14 @@ export default function PilotsGrid({ pilots, currentUserId }: PilotsGridProps) {
               <button
                 type="button"
                 onClick={() => setSelected(null)}
-                className="absolute right-5 top-5 rounded-full border border-white/30 bg-black/40 px-3 py-1 text-xs uppercase tracking-[0.3em] text-zinc-200 transition hover:border-white/60 hover:text-white"
+                className="absolute right-4 top-4 rounded-full border border-white/30 bg-black/40 px-3 py-1 text-xs uppercase tracking-[0.3em] text-zinc-200 transition hover:border-white/60 hover:text-white sm:right-5 sm:top-5"
               >
                 Fechar
               </button>
-              <div className="absolute bottom-0 left-0 flex w-full items-end gap-4 p-6">
-                <div className="h-20 w-20 overflow-hidden rounded-2xl border border-white/10 bg-black/60">
+              <div className="absolute bottom-0 left-0 flex w-full items-end gap-3 p-4 sm:gap-4 sm:p-6">
+                <div className="h-16 w-16 overflow-hidden rounded-2xl border border-white/10 bg-black/60 sm:h-20 sm:w-20">
                   {selected.avatar_url ? (
-                    <img
-                      src={selected.avatar_url}
-                      alt="Avatar"
-                      className="h-full w-full object-cover"
-                    />
+                    <img src={selected.avatar_url} alt="Avatar" className="h-full w-full object-cover" />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-xs text-zinc-400">
                       {selected.display_name?.slice(0, 2).toUpperCase() || "CRE"}
@@ -183,10 +168,8 @@ export default function PilotsGrid({ pilots, currentUserId }: PilotsGridProps) {
                   )}
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-yellow-300">
-                    Piloto
-                  </p>
-                  <h2 className="font-display text-3xl tracking-[0.18em]">
+                  <p className="text-xs uppercase tracking-[0.3em] text-yellow-300">Piloto</p>
+                  <h2 className="font-display text-2xl tracking-[0.14em] sm:text-3xl sm:tracking-[0.18em]">
                     {selected.display_name || "Piloto CRE"}
                   </h2>
                   <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">
@@ -196,44 +179,32 @@ export default function PilotsGrid({ pilots, currentUserId }: PilotsGridProps) {
               </div>
             </div>
 
-            <div className="grid gap-6 p-6 sm:grid-cols-[0.9fr_1.1fr] sm:p-8">
+            <div className="grid gap-4 p-4 sm:grid-cols-[0.9fr_1.1fr] sm:gap-6 sm:p-8">
               <div className="space-y-4">
                 <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                  <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">
-                    Experiência
-                  </p>
-                  <p className="mt-2 text-sm text-zinc-200">
-                    {selected.experience || "Experiência não informada."}
-                  </p>
+                  <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">Experiencia</p>
+                  <p className="mt-2 text-sm text-zinc-200">{selected.experience || "Experiencia nao informada."}</p>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                  <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">
-                    Bio
-                  </p>
-                  <p className="mt-2 text-sm text-zinc-200">
-                    {selected.bio || "Sem bio cadastrada."}
-                  </p>
+                  <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">Bio</p>
+                  <p className="mt-2 text-sm text-zinc-200">{selected.bio || "Sem bio cadastrada."}</p>
                 </div>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3 sm:gap-4">
                 {selected.username ? (
                   <a
-                    href={`/pilotos/${encodeURIComponent(
-                      selected.username.trim().toLowerCase(),
-                    )}`}
-                    className="rounded-full bg-yellow-300 px-4 py-3 text-xs font-semibold uppercase tracking-[0.25em] text-black transition hover:brightness-110"
+                    href={`/pilotos/${encodeURIComponent(selected.username.trim().toLowerCase())}`}
+                    className="rounded-full bg-yellow-300 px-4 py-3 text-center text-xs font-semibold uppercase tracking-[0.25em] text-black transition hover:brightness-110"
                   >
                     Ver perfil completo
                   </a>
                 ) : (
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">
-                    Perfil sem username
-                  </p>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500">Perfil sem username</p>
                 )}
                 {isOwner ? (
                   <a
                     href="/dashboard"
-                    className="rounded-full border border-yellow-300/40 px-4 py-3 text-xs uppercase tracking-[0.25em] text-yellow-200 transition hover:border-yellow-300 hover:text-yellow-100"
+                    className="rounded-full border border-yellow-300/40 px-4 py-3 text-center text-xs uppercase tracking-[0.25em] text-yellow-200 transition hover:border-yellow-300 hover:text-yellow-100"
                   >
                     Editar meu perfil
                   </a>

@@ -1,5 +1,6 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { createClient } from "@/lib/supabase/server";
 import ProfileTabs from "../ProfileTabs";
+import BackToPreviousButton from "../BackToPreviousButton";
 
 export const dynamic = "force-dynamic";
 
@@ -34,10 +35,60 @@ const parseLapTimeMs = (value?: string | null) => {
 export default async function ProfilePage({
   params,
 }: {
-  params: { username: string };
+  params: { username?: string } | Promise<{ username?: string }>;
 }) {
   const supabase = await createClient();
-  const usernameParam = decodeURIComponent(params.username);
+  const resolvedParams = await Promise.resolve(params);
+  const rawUsername = resolvedParams?.username?.trim() ?? "";
+  const usernameParam = rawUsername ? decodeURIComponent(rawUsername) : "";
+
+  if (!usernameParam) {
+    const { data: fallbackUsers } = await supabase
+      .from("profiles")
+      .select("username, email")
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    const safeFallbackUsers = fallbackUsers ?? [];
+
+    return (
+      <div className="min-h-screen racing-bg text-white">
+        <div className="absolute inset-0 track-grid opacity-35" />
+        <div className="absolute inset-0 scanline opacity-15" />
+
+        <div className="relative mx-auto flex max-w-3xl flex-col gap-6 px-4 pb-24 pt-8 md:px-6 md:pt-12">
+          <h1 className="font-display text-3xl tracking-[0.12em]">
+            Perfil não encontrado
+          </h1>
+          <p className="text-sm text-zinc-300">
+            Username solicitado: <span className="text-yellow-300">@inválido</span>
+          </p>
+          <div className="glass rounded-3xl p-6">
+            <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">
+              Últimos usernames cadastrados
+            </p>
+            <ul className="mt-4 flex flex-col gap-2 text-sm text-zinc-200">
+              {safeFallbackUsers.length === 0 ? (
+                <li>Nenhum perfil encontrado.</li>
+              ) : (
+                safeFallbackUsers.map((user) => (
+                  <li key={`${user.username}-${user.email}`}>
+                    @{user.username ?? "(sem username)"} - {user.email ?? ""}
+                  </li>
+                ))
+              )}
+            </ul>
+            <a
+              href="/pilotos"
+              className="mt-6 inline-flex rounded-full border border-white/20 px-5 py-3 text-xs uppercase tracking-[0.25em] text-zinc-200 transition hover:border-white/50 hover:text-white"
+            >
+              Voltar para pilotos
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -61,7 +112,7 @@ export default async function ProfilePage({
         <div className="absolute inset-0 track-grid opacity-35" />
         <div className="absolute inset-0 scanline opacity-15" />
 
-        <div className="relative mx-auto flex max-w-3xl flex-col gap-6 px-6 pb-24 pt-12">
+        <div className="relative mx-auto flex max-w-3xl flex-col gap-6 px-4 pb-24 pt-8 md:px-6 md:pt-12">
           <h1 className="font-display text-3xl tracking-[0.12em]">
             Perfil não encontrado
           </h1>
@@ -95,7 +146,12 @@ export default async function ProfilePage({
       </div>
     );
   }
-
+  const rawExperience = (profile.experience ?? "").trim();
+  const isPlaceholderExperience =
+    rawExperience.length === 0 || rawExperience.toLowerCase() === "cre";
+  const experienceText = isPlaceholderExperience
+    ? "Experiência não informada."
+    : rawExperience;
   const { data: victories } = await supabase
     .from("victories")
     .select("id, title, track, position, category, date, notes, created_at")
@@ -149,6 +205,13 @@ export default async function ProfilePage({
     (row: LapTimeRow) => [row.track, row.time] as const,
   );
 
+  const badges = [
+    winsCount >= 10 ? "Lenda: 10+ vitorias" : null,
+    podiumsCount >= 5 ? "Podiador: 5+ podios" : null,
+    safeVictories.length >= 20 ? "Maratonista: 20+ corridas" : null,
+    trackTimes.length >= 5 ? "Engenheiro de pista: 5+ tempos" : null,
+  ].filter(Boolean) as string[];
+
   const timeEntries = trackTimes
     .map(([track, time]) => ({
       track: track ?? "",
@@ -163,13 +226,13 @@ export default async function ProfilePage({
 
   const bestMs = timeEntries.length ? Math.min(...timeEntries.map((e) => e.ms)) : 0;
   const maxMs = timeEntries.length ? Math.max(...timeEntries.map((e) => e.ms)) : 0;
-
   return (
     <div className="min-h-screen racing-bg text-white">
       <div className="absolute inset-0 track-grid opacity-35" />
       <div className="absolute inset-0 scanline opacity-15" />
 
-      <div className="relative mx-auto flex max-w-6xl flex-col gap-10 px-6 pb-24 pt-12">
+      <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-24 pt-8 md:gap-10 md:px-6 md:pt-12">
+        <BackToPreviousButton />
         <header className="glass rounded-3xl p-6 sm:p-8">
           <div
             className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/50"
@@ -180,7 +243,7 @@ export default async function ProfilePage({
             }}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-black/10" />
-            <div className="relative flex flex-col gap-6 px-6 py-8 sm:flex-row sm:items-center sm:justify-between">
+            <div className="relative flex flex-col gap-6 px-4 py-6 sm:px-6 sm:py-8 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-4">
                 <div className="h-16 w-16 overflow-hidden rounded-2xl border border-white/15 bg-black/40">
                   {profile.avatar_url ? (
@@ -260,8 +323,23 @@ export default async function ProfilePage({
                   Experiência
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-zinc-200">
-                  {profile.experience || "Experiência não informada."}
+                  {experienceText}
                 </p>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {badges.length === 0 ? (
+                    <span className="text-xs text-zinc-400">Sem badges por enquanto.</span>
+                  ) : (
+                    badges.map((badge) => (
+                      <span
+                        key={badge}
+                        className="rounded-full border border-yellow-300/30 bg-yellow-300/10 px-3 py-1 text-[10px] uppercase tracking-[0.25em] text-yellow-200"
+                      >
+                        {badge}
+                      </span>
+                    ))
+                  )}
+                </div>
 
                 <div className="mt-6 grid gap-3">
                   <div className="rounded-2xl border border-white/10 bg-black/40 px-4 py-3">
@@ -308,7 +386,7 @@ export default async function ProfilePage({
           }
           races={
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 className="font-display text-xl tracking-[0.18em]">
                   Últimas corridas
                 </h3>
@@ -354,7 +432,7 @@ export default async function ProfilePage({
           }
           times={
             <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 className="font-display text-xl tracking-[0.18em]">
                   Tempos por pista
                 </h3>
@@ -380,7 +458,7 @@ export default async function ProfilePage({
                 )}
               </div>
               <div className="mt-8 rounded-2xl border border-white/10 bg-black/40 p-4">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <h4 className="text-xs uppercase tracking-[0.3em] text-zinc-300">
                     Evolução de tempo
                   </h4>
@@ -429,7 +507,7 @@ export default async function ProfilePage({
         />
 
         <section className="glass rounded-3xl p-6 sm:p-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="font-display text-2xl tracking-[0.18em]">
               Vitórias e resultados
             </h2>
@@ -451,7 +529,7 @@ export default async function ProfilePage({
                   }
                   className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="text-sm uppercase tracking-[0.25em] text-yellow-300/80">
                       {victory.title}
                     </p>
@@ -478,3 +556,20 @@ export default async function ProfilePage({
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

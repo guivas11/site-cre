@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
@@ -12,7 +12,7 @@ export default function ProfileTabs({ overview, races, times }: ProfileTabsProps
   const [tab, setTab] = useState<"overview" | "races" | "times">("overview");
 
   return (
-    <div className="glass rounded-3xl p-6 sm:p-8">
+    <div className="glass rounded-2xl p-4 sm:p-6 md:rounded-3xl md:p-8">
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
@@ -57,3 +57,4 @@ export default function ProfileTabs({ overview, races, times }: ProfileTabsProps
     </div>
   );
 }
+

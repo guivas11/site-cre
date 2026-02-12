@@ -11,8 +11,7 @@ type ClipFormModalProps = {
 export default function ClipFormModal({ userId, action }: ClipFormModalProps) {
   const [open, setOpen] = useState(false);
   const dialogRef = useRef<HTMLDivElement | null>(null);
-  const prevOverflowRef = useRef<string>("");
-
+  
   useEffect(() => {
     if (!open) return;
     const prevOverflow = document.body.style.overflow;
@@ -24,7 +23,7 @@ export default function ClipFormModal({ userId, action }: ClipFormModalProps) {
     };
     window.addEventListener("keydown", handleKey);
     return () => {
-      document.body.style.overflow = prevOverflowRef.current;
+      document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", handleKey);
     };
   }, [open]);
@@ -53,7 +52,7 @@ export default function ClipFormModal({ userId, action }: ClipFormModalProps) {
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-50 grid place-items-center p-6 sm:p-10">
+        <div className="fixed inset-0 z-50 grid place-items-center p-3 sm:p-6">
           <div
             className="absolute inset-0 bg-black/80"
             onClick={() => setOpen(false)}
@@ -61,9 +60,9 @@ export default function ClipFormModal({ userId, action }: ClipFormModalProps) {
           />
           <div
             ref={dialogRef}
-            className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0f] text-white shadow-[0_40px_120px_-30px_rgba(0,0,0,0.8)]"
+            className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-white/10 bg-[#0b0b0f] text-white shadow-[0_40px_120px_-30px_rgba(0,0,0,0.8)] sm:rounded-3xl"
           >
-            <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+            <div className="flex items-center justify-between border-b border-white/10 px-4 py-3 sm:px-6 sm:py-4">
               <div>
                 <p className="text-[10px] uppercase tracking-[0.35em] text-yellow-300">
                   Enviar clip
@@ -82,7 +81,7 @@ export default function ClipFormModal({ userId, action }: ClipFormModalProps) {
             </div>
 
             <form
-              className="max-h-[50vh] overflow-y-auto px-6 py-5 scroll-smooth [scrollbar-width:thin] [scrollbar-color:rgba(255,214,79,0.7)_rgba(255,255,255,0.08)] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar-thumb]:bg-yellow-300/60 [&::-webkit-scrollbar-thumb]:rounded-full"
+              className="max-h-[72vh] overflow-y-auto px-4 py-4 scroll-smooth [scrollbar-width:thin] [scrollbar-color:rgba(255,214,79,0.7)_rgba(255,255,255,0.08)] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-white/5 [&::-webkit-scrollbar-thumb]:bg-yellow-300/60 [&::-webkit-scrollbar-thumb]:rounded-full sm:max-h-[75vh] sm:px-6 sm:py-5"
               action={action}
             >
               <div className="grid gap-4">
@@ -187,6 +186,8 @@ export default function ClipFormModal({ userId, action }: ClipFormModalProps) {
     </>
   );
 }
+
+
 
 
 

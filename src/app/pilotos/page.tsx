@@ -52,7 +52,7 @@ export default async function PilotsPage() {
 
   const weeklyWins = recentVictories.filter((victory) => {
     const pos = victory.position?.toLowerCase() ?? "";
-    return ["1º", "1", "p1", "1o", "1°"].includes(pos);
+    return ["1", "1o", "p1", "p01"].includes(pos);
   });
 
   const spotlightId =
@@ -67,36 +67,32 @@ export default async function PilotsPage() {
       <div className="absolute inset-0 track-grid opacity-35" />
       <div className="absolute inset-0 scanline opacity-15" />
 
-      <div className="relative mx-auto flex max-w-6xl flex-col gap-10 px-6 pb-24 pt-12">
-        <header className="flex flex-wrap items-center justify-between gap-6">
+      <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-24 pt-6 md:gap-10 md:px-6 md:pt-12">
+        <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.4em] text-yellow-300">
-              Comunidade CRE
-            </p>
+            <p className="text-xs uppercase tracking-[0.4em] text-yellow-300">Comunidade CRE</p>
             <h1 className="font-display text-3xl tracking-[0.2em]">Pilotos cadastrados</h1>
             <p className="mt-2 text-sm text-zinc-300">
-              Explore perfis, vitórias e experiências de cada piloto.
+              Explore perfis, vitorias e experiencias de cada piloto.
             </p>
           </div>
           <a
             href="/"
-            className="rounded-full border border-white/20 px-5 py-3 text-xs uppercase tracking-[0.25em] text-zinc-200 transition hover:border-white/50 hover:text-white"
+            className="w-full rounded-full border border-white/20 px-5 py-3 text-center text-xs uppercase tracking-[0.25em] text-zinc-200 transition hover:border-white/50 hover:text-white sm:w-auto"
           >
             Voltar para a home
           </a>
         </header>
 
-        <section className="glass rounded-3xl p-6 sm:p-8">
-          <div className="flex flex-wrap items-start justify-between gap-6">
+        <section className="glass rounded-2xl p-4 sm:p-6 md:rounded-3xl md:p-8">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">
-                Piloto em destaque
-              </p>
+              <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">Piloto em destaque</p>
               <h2 className="mt-3 font-display text-2xl tracking-[0.18em]">
                 {spotlight?.display_name || spotlight?.username || "Piloto CRE"}
               </h2>
               <p className="mt-2 text-sm text-zinc-300">
-                {spotlight?.experience || "Sem experiência cadastrada ainda."}
+                {spotlight?.experience || "Sem experiencia cadastrada ainda."}
               </p>
             </div>
             {spotlight ? (
@@ -116,9 +112,7 @@ export default async function PilotsPage() {
                   <p className="text-xs uppercase tracking-[0.3em] text-yellow-300">
                     {spotlight.username ? `@${spotlight.username}` : "Sem username"}
                   </p>
-                  <p className="text-sm text-zinc-200">
-                    {spotlight.display_name || "Piloto CRE"}
-                  </p>
+                  <p className="text-sm text-zinc-200">{spotlight.display_name || "Piloto CRE"}</p>
                 </div>
               </div>
             ) : null}

@@ -189,3 +189,28 @@ body {
 .animate-toast-in {
   animation: toast-in 0.35s ease-out;
 }
+
+
+@media (max-width: 768px) {
+  .font-display {
+    letter-spacing: 0.06em;
+  }
+
+  .glass {
+    backdrop-filter: blur(10px);
+  }
+
+  a,
+  button,
+  input,
+  textarea,
+  select {
+    touch-action: manipulation;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}

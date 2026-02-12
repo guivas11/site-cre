@@ -10,7 +10,7 @@ const strengthConfig = {
     width: "w-1/3",
   },
   medium: {
-    label: "Senha média",
+    label: "Senha media",
     color: "bg-yellow-400",
     width: "w-2/3",
   },
@@ -28,20 +28,18 @@ export default function PasswordField() {
 
   return (
     <div>
-      <label className="text-xs uppercase tracking-[0.3em] text-zinc-400">
-        Senha
-      </label>
+      <label className="text-xs uppercase tracking-[0.3em] text-zinc-400">Senha</label>
       <input
         className="mt-2 w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm text-white placeholder:text-zinc-500"
         name="password"
         type="password"
-        placeholder="Mínimo 8 caracteres"
+        placeholder="Minimo 8 caracteres"
         minLength={8}
         required
         onChange={(event) => setValue(event.target.value)}
       />
       <p className="mt-2 text-xs text-zinc-500">
-        Use 8+ caracteres com maiúscula, minúscula, número e símbolo.
+        Use 8+ caracteres com maiuscula, minuscula, numero e simbolo.
       </p>
       <div className="mt-3 flex items-center gap-3">
         <div className="h-2 flex-1 rounded-full bg-white/10">
@@ -49,9 +47,7 @@ export default function PasswordField() {
             className={`h-2 rounded-full transition-all duration-300 ${config.color} ${config.width}`}
           />
         </div>
-        <span className="text-xs uppercase tracking-[0.3em] text-zinc-400">
-          {config.label}
-        </span>
+        <span className="text-xs uppercase tracking-[0.3em] text-zinc-400">{config.label}</span>
       </div>
     </div>
   );

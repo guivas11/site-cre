@@ -107,7 +107,7 @@ export default async function VitoriasPage() {
       <div className="absolute inset-0 track-grid opacity-35" />
       <div className="absolute inset-0 scanline opacity-15" />
 
-      <div className="relative mx-auto flex max-w-6xl flex-col gap-10 px-6 pb-24 pt-8">
+      <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-24 pt-6 md:gap-10 md:px-6 md:pt-8">
         <header className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-yellow-300">
@@ -129,7 +129,7 @@ export default async function VitoriasPage() {
         </header>
 
         <section className="grid gap-6 lg:grid-cols-2">
-          <div className="glass rounded-3xl p-6">
+          <div className="glass rounded-2xl p-4 md:rounded-3xl md:p-6">
             <h2 className="text-sm uppercase tracking-[0.4em] text-yellow-300">
               Ranking por vitorias
             </h2>
@@ -183,7 +183,7 @@ export default async function VitoriasPage() {
             </div>
           </div>
 
-          <div className="glass rounded-3xl p-6">
+          <div className="glass rounded-2xl p-4 md:rounded-3xl md:p-6">
             <h2 className="text-sm uppercase tracking-[0.4em] text-yellow-300">
               Ranking por podios
             </h2>
@@ -287,7 +287,7 @@ export default async function VitoriasPage() {
             return (
               <div
                 key={pilot.userId}
-                className="glass rounded-3xl p-6"
+                className="glass rounded-2xl p-4 md:rounded-3xl md:p-6"
               >
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 overflow-hidden rounded-full border border-white/10 bg-black/60">
@@ -347,3 +347,4 @@ export default async function VitoriasPage() {
     </div>
   );
 }
+

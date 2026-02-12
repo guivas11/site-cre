@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { f1Tracks } from "@/lib/f1Tracks";
@@ -93,3 +93,4 @@ export default function TrackSelect({
     </div>
   );
 }
+

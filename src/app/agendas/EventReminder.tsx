@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 
@@ -9,16 +9,13 @@ type EventReminderProps = {
 };
 
 export default function EventReminder({ title, startAt }: EventReminderProps) {
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("cre:event-reminder") === "true";
+  });
 
   useEffect(() => {
-    const stored = localStorage.getItem("cre:event-reminder");
-    if (stored === "true") {
-      setEnabled(true);
-    }
-  }, []);
-
-  useEffect(() => {
+    if (typeof window === "undefined") return;
     localStorage.setItem("cre:event-reminder", enabled ? "true" : "false");
   }, [enabled]);
 
@@ -46,3 +43,4 @@ export default function EventReminder({ title, startAt }: EventReminderProps) {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
   addVictory,
@@ -87,8 +87,8 @@ export default async function DashboardPage({
       <div className="absolute inset-0 track-grid opacity-35" />
       <div className="absolute inset-0 scanline opacity-15" />
 
-      <div className="relative mx-auto flex max-w-6xl flex-col gap-10 px-6 pb-24 pt-12">
-        <header className="flex items-center justify-between">
+      <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-4 pb-24 pt-6 md:gap-10 md:px-6 md:pt-12">
+        <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-yellow-300">
               Área do piloto
@@ -98,7 +98,7 @@ export default async function DashboardPage({
             </h1>
             <p className="mt-2 text-sm text-zinc-300">{data.user.email}</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
             <a
               className="rounded-full border border-white/20 px-5 py-3 text-xs uppercase tracking-[0.25em] text-zinc-200 transition hover:border-white/50 hover:text-white"
               href="/"
@@ -106,7 +106,7 @@ export default async function DashboardPage({
               Voltar para a home
             </a>
             <form action={signOut}>
-              <button className="rounded-full border border-red-500/60 px-5 py-3 text-xs uppercase tracking-[0.25em] text-red-200 transition hover:border-red-400 hover:text-red-100">
+              <button className="w-full rounded-full border border-red-500/60 px-5 py-3 text-xs uppercase tracking-[0.25em] text-red-200 transition hover:border-red-400 hover:text-red-100 sm:w-auto">
                 Sair
               </button>
             </form>
@@ -127,7 +127,7 @@ export default async function DashboardPage({
         <DashboardTabs
           profileContent={
             <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-              <div className="glass rounded-3xl p-6">
+              <div className="glass rounded-2xl p-4 md:rounded-3xl md:p-6">
                 <ProfileBanner
                   displayName={profile?.display_name || "Piloto CRE"}
                   username={profile?.username}
@@ -208,7 +208,7 @@ export default async function DashboardPage({
                       </div>
                       <div>
                         <label className="text-xs uppercase tracking-[0.3em] text-zinc-400">
-                          Username (único)
+                          Username (unico)
                         </label>
                         <input
                           className="mt-2 w-full rounded-2xl border border-white/10 bg-black/50 px-4 py-3 text-sm text-white"
@@ -218,7 +218,7 @@ export default async function DashboardPage({
                           required
                         />
                         <p className="mt-1 text-xs text-zinc-500">
-                          3-20 caracteres: letras minúsculas, números ou "_".
+                          3-20 caracteres: letras minusculas, numeros ou &quot;_&quot;.
                         </p>
                       </div>
                     </div>
@@ -349,8 +349,8 @@ export default async function DashboardPage({
                 <FormSaveToast formId="profile-form" />
               </div>
 
-              <div className="glass rounded-3xl p-6">
-                <div className="flex items-center justify-between">
+              <div className="glass rounded-2xl p-4 md:rounded-3xl md:p-6">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <h2 className="font-display text-2xl tracking-[0.18em]">Vitórias e resultados</h2>
                   <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-zinc-400">
                     <svg className="h-3.5 w-3.5 text-yellow-300/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -371,15 +371,15 @@ export default async function DashboardPage({
                 Resumo rápido
               </p>
               <div className="grid gap-2 text-sm text-zinc-200">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <span className="text-zinc-400">Piloto</span>
                   <span>{profile?.display_name || "Piloto CRE"}</span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <span className="text-zinc-400">Username</span>
                   <span>{profile?.username ? `@${profile.username}` : "--"}</span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <span className="text-zinc-400">Pista favorita</span>
                   <span>{profile?.favorite_track || "--"}</span>
                 </div>
@@ -445,7 +445,7 @@ export default async function DashboardPage({
                     key={victory.id}
                     className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                       <p className="text-sm uppercase tracking-[0.25em] text-yellow-300/80">
                         {victory.title}
                       </p>
@@ -472,8 +472,8 @@ export default async function DashboardPage({
             </section>
           }
           lapTimesContent={
-            <section className="glass rounded-3xl p-6">
-              <div className="flex items-center justify-between">
+            <section className="glass rounded-2xl p-4 md:rounded-3xl md:p-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <h2 className="font-display text-2xl tracking-[0.18em]">
                   Tempos de volta (F1)
                 </h2>
@@ -517,8 +517,8 @@ export default async function DashboardPage({
           }
         />
 
-        <section className="glass rounded-3xl p-6">
-          <div className="flex items-center justify-between">
+        <section className="glass rounded-2xl p-4 md:rounded-3xl md:p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="font-display text-2xl tracking-[0.18em]">
               Estatísticas (automático)
             </h2>
@@ -585,6 +585,10 @@ export default async function DashboardPage({
     </div>
   );
 }
+
+
+
+
 
 
 

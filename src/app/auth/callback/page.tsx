@@ -12,18 +12,14 @@ export default function AuthCallbackPage() {
 
     const run = async () => {
       const supabase = createClient();
-      const { error } = await supabase.auth.exchangeCodeForSession(
-        window.location.href,
-      );
+      const { error } = await supabase.auth.exchangeCodeForSession(window.location.href);
 
       if (!isActive) {
         return;
       }
 
       if (error) {
-        router.replace(
-          "/login?error=Falha%20ao%20autenticar.%20Tente%20novamente.",
-        );
+        router.replace("/login?error=Falha%20ao%20autenticar.%20Tente%20novamente.");
         return;
       }
 
@@ -53,17 +49,11 @@ export default function AuthCallbackPage() {
 
   return (
     <div className="min-h-screen bg-black">
-      <div className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-6 text-center">
+      <div className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-4 text-center md:px-6">
         <div className="glass w-full rounded-3xl p-8">
-          <p className="text-xs uppercase tracking-[0.4em] text-yellow-300/80">
-            Autenticação
-          </p>
-          <h1 className="mt-2 text-2xl font-semibold text-white">
-            Concluindo login...
-          </h1>
-          <p className="mt-3 text-sm text-zinc-400">
-            Aguarde enquanto sincronizamos seu perfil.
-          </p>
+          <p className="text-xs uppercase tracking-[0.4em] text-yellow-300/80">Autenticacao</p>
+          <h1 className="mt-2 text-2xl font-semibold text-white">Concluindo login...</h1>
+          <p className="mt-3 text-sm text-zinc-400">Aguarde enquanto sincronizamos seu perfil.</p>
         </div>
       </div>
     </div>

@@ -10,12 +10,12 @@ type Community = {
 
 type Message = {
   id: string;
-  community_id: string;
+  community: string;
   user_id: string;
   display_name: string | null;
   username: string | null;
   avatar_url: string | null;
-  content: string;
+  message: string;
   created_at: string;
 };
 
@@ -79,7 +79,7 @@ export default function CommunityChat({
       const { data } = await supabase
         .from("community_messages")
         .select("*")
-        .eq("community_id", community.id)
+        .eq("community", community.id)
         .order("created_at", { ascending: true })
         .limit(120);
 
@@ -99,7 +99,7 @@ export default function CommunityChat({
           event: "INSERT",
           schema: "public",
           table: "community_messages",
-          filter: `community_id=eq.${community.id}`,
+          filter: `community=eq.${community.id}`,
         },
         (payload) => {
           const next = payload.new as Message;
@@ -138,8 +138,11 @@ export default function CommunityChat({
     const { error: insertError } = await supabase
       .from("community_messages")
       .insert({
+        id: crypto.randomUUID(),
+        community: community.id,
         community_id: community.id,
         user_id: userId,
+        message: text,
         content: text,
         display_name: profile?.display_name ?? "Piloto CRE",
         username: profile?.username ?? null,
@@ -147,7 +150,7 @@ export default function CommunityChat({
       });
 
     if (insertError) {
-      setError("Nao foi possivel enviar a mensagem.");
+      setError(`Nao foi possivel enviar a mensagem: ${insertError.message}`);
     } else {
       setInput("");
     }
@@ -207,7 +210,7 @@ export default function CommunityChat({
                       {formatTime(msg.created_at)}
                     </span>
                   </div>
-                  <p className="mt-1 text-sm text-zinc-200">{msg.content}</p>
+                  <p className="mt-1 text-sm text-zinc-200">{msg.message}</p>
                 </div>
               </div>
             ))}
@@ -247,3 +250,11 @@ export default function CommunityChat({
     </div>
   );
 }
+
+
+
+
+
+
+
+

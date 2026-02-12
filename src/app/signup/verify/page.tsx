@@ -11,21 +11,18 @@ export default async function VerifyPage({ searchParams }: VerifyPageProps) {
       <div className="absolute inset-0 track-grid opacity-35" />
       <div className="absolute inset-0 scanline opacity-15" />
 
-      <div className="relative mx-auto flex max-w-4xl flex-col gap-10 px-6 pb-24 pt-16">
+      <div className="relative mx-auto flex max-w-4xl flex-col gap-8 px-4 pb-24 pt-10 md:gap-10 md:px-6 md:pt-16">
         <header className="text-center">
-          <p className="text-xs uppercase tracking-[0.35em] text-yellow-300">
-            Confirmação necessária
-          </p>
+          <p className="text-xs uppercase tracking-[0.35em] text-yellow-300">Confirmacao necessaria</p>
           <h1 className="mt-4 font-display text-4xl tracking-[0.12em] sm:text-5xl">
             Confirme seu e-mail
           </h1>
           <p className="mt-4 text-base text-zinc-300">
-            Enviamos um link de confirmação para{" "}
-            <span className="text-yellow-300">{email}</span>.
+            Enviamos um link de confirmacao para <span className="text-yellow-300">{email}</span>.
           </p>
         </header>
 
-        <section className="glass rounded-3xl p-8 text-center">
+        <section className="glass rounded-2xl p-4 text-center sm:rounded-3xl sm:p-8">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-yellow-300/40 bg-yellow-300/10 text-yellow-300">
             <svg viewBox="0 0 24 24" className="h-8 w-8" aria-hidden="true">
               <path
@@ -34,15 +31,13 @@ export default async function VerifyPage({ searchParams }: VerifyPageProps) {
               />
             </svg>
           </div>
-          <h2 className="mt-6 font-display text-2xl tracking-[0.18em]">
-            Quase lá
-          </h2>
+          <h2 className="mt-6 font-display text-2xl tracking-[0.18em]">Quase la</h2>
           <p className="mt-3 text-sm text-zinc-300">
-            Abra seu e-mail e clique no link para ativar sua conta. Após
-            confirmar, você será redirecionado para o seu perfil automaticamente.
+            Abra seu e-mail e clique no link para ativar sua conta. Apos confirmar, voce sera
+            redirecionado para o seu perfil automaticamente.
           </p>
           <div className="mt-6 flex flex-col items-center gap-3 text-xs uppercase tracking-[0.3em] text-zinc-400">
-            <span>Não recebeu?</span>
+            <span>Nao recebeu?</span>
             <span>Verifique o spam ou aguarde alguns minutos.</span>
           </div>
           <a
