@@ -1,5 +1,7 @@
+﻿import { resendVerificationEmail } from "./actions";
+
 type VerifyPageProps = {
-  searchParams: Promise<{ email?: string }>;
+  searchParams: Promise<{ email?: string; error?: string; success?: string }>;
 };
 
 export default async function VerifyPage({ searchParams }: VerifyPageProps) {
@@ -33,16 +35,34 @@ export default async function VerifyPage({ searchParams }: VerifyPageProps) {
           </div>
           <h2 className="mt-6 font-display text-2xl tracking-[0.18em]">Quase la</h2>
           <p className="mt-3 text-sm text-zinc-300">
-            Abra seu e-mail e clique no link para ativar sua conta. Apos confirmar, voce sera
-            redirecionado para o seu perfil automaticamente.
+            Abra seu e-mail e clique no link para ativar sua conta. Depois disso, voce ja pode entrar normalmente.
           </p>
-          <div className="mt-6 flex flex-col items-center gap-3 text-xs uppercase tracking-[0.3em] text-zinc-400">
-            <span>Nao recebeu?</span>
-            <span>Verifique o spam ou aguarde alguns minutos.</span>
-          </div>
+
+          {params.error ? (
+            <p className="mt-4 rounded-2xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+              {params.error}
+            </p>
+          ) : null}
+
+          {params.success ? (
+            <p className="mt-4 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+              {params.success}
+            </p>
+          ) : null}
+
+          <form action={resendVerificationEmail} className="mt-6">
+            <input type="hidden" name="email" value={email} />
+            <button
+              type="submit"
+              className="rounded-full border border-yellow-300/45 bg-yellow-300/10 px-5 py-3 text-xs uppercase tracking-[0.25em] text-yellow-100 transition hover:border-yellow-200 hover:bg-yellow-300/20"
+            >
+              Reenviar e-mail
+            </button>
+          </form>
+
           <a
             href="/login"
-            className="mt-6 inline-flex rounded-full border border-white/20 px-5 py-3 text-xs uppercase tracking-[0.25em] text-zinc-200 transition hover:border-white/50 hover:text-white"
+            className="mt-4 inline-flex rounded-full border border-white/20 px-5 py-3 text-xs uppercase tracking-[0.25em] text-zinc-200 transition hover:border-white/50 hover:text-white"
           >
             Voltar para login
           </a>
